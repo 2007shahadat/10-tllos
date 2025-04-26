@@ -10,19 +10,37 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 
 const express = require('express');
 const app = express();
+const TelegramBot = require('node-telegram-bot-api');
 
-// Set the port to the value provided by the environment (Render will assign a dynamic port)
-const PORT = process.env.PORT || 3000;
+// Get your bot token from .env file
+const botToken = process.env.BOT_TOKEN;
 
-// Handle basic request to root endpoint
+// Create the bot instance
+const bot = new TelegramBot(botToken, { polling: true });
+
+// Handle '/start' command
+bot.onText(/\/start/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, 'Welcome to the bot!');
+});
+
+// Handle other commands or messages
+bot.onText(/\/help/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, 'Here are the commands: /start, /help, /removebg etc.');
+});
+
+// Basic route to check server
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+  res.send('Bot is working!');
 });
 
-// Start the server and listen on the port
+// Set the port and listen to incoming requests
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
+
 
 bot.start((ctx) => ctx.reply('Welcome to the All-in-One Tools Bot!'));
 
