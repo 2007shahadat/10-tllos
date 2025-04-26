@@ -8,6 +8,22 @@ require('dotenv').config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
+const express = require('express');
+const app = express();
+
+// Set the port to the value provided by the environment (Render will assign a dynamic port)
+const PORT = process.env.PORT || 3000;
+
+// Handle basic request to root endpoint
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
+
+// Start the server and listen on the port
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
 bot.start((ctx) => ctx.reply('Welcome to the All-in-One Tools Bot!'));
 
 bot.command('removebg', async (ctx) => {
